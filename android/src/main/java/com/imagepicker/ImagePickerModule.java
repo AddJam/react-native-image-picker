@@ -71,6 +71,7 @@ public class ImagePickerModule extends ReactContextBaseJavaModule {
   private Boolean noData = false;
   private Boolean tmpImage;
   private Boolean pickVideo = false;
+  private Boolean pickMixed = false;
   private int maxWidth = 0;
   private int maxHeight = 0;
   private int quality = 100;
@@ -266,10 +267,14 @@ public class ImagePickerModule extends ReactContextBaseJavaModule {
 
     parseOptions(options);
 
-    if (pickVideo) {
+    if (pickVideo || pickMixed) {
       requestCode = REQUEST_LAUNCH_VIDEO_LIBRARY;
       libraryIntent = new Intent(Intent.ACTION_PICK);
-      libraryIntent.setType("video/*");
+      if (pickVideo) {
+        libraryIntent.setType("video/*");
+      } else {
+        libraryIntent.setType("image/* video/*");
+      }
     } else {
       requestCode = REQUEST_LAUNCH_IMAGE_LIBRARY;
       libraryIntent = new Intent(Intent.ACTION_PICK,
@@ -720,6 +725,10 @@ public class ImagePickerModule extends ReactContextBaseJavaModule {
     pickVideo = false;
     if (options.hasKey("mediaType") && options.getString("mediaType").equals("video")) {
       pickVideo = true;
+    }
+    pickMixed = false;
+    if (options.hasKey("mediaType") && options.getString("mediaType").equals("mixed")) {
+      pickMixed = true;
     }
     videoQuality = 1;
     if (options.hasKey("videoQuality") && options.getString("videoQuality").equals("low")) {
