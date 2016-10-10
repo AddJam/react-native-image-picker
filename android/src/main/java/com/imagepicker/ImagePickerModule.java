@@ -273,6 +273,7 @@ public class ImagePickerModule extends ReactContextBaseJavaModule {
       if (pickVideo) {
         libraryIntent.setType("video/*");
       } else {
+        requestCode = REQUEST_LAUNCH_IMAGE_LIBRARY;
         libraryIntent.setType("image/* video/*");
       }
     } else {
